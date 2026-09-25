@@ -1,7 +1,7 @@
 #!/bin/bash
 # Checks that Django responds and can reach Postgres.
 set -euo pipefail
-URL="http://localhost:8000/health"
+URL="http://host.docker.internal:8000/health"
 
 for i in $(seq 1 20); do
   if curl -fs "${URL}" > /dev/null; then
