@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    
+    environment {
+        HOST_PORT = '8000'
+        APP_HOST = 'host.docker.internal'
+    }
 
     stages {
         stage('Checkout') {
@@ -10,21 +15,21 @@ pipeline {
 
         stage('Deploy with Docker Compose') {
             steps {
-                sh 'chmod +x scripts/*.sh'
-                sh './scripts/deploy.sh'
+                sh 'chmod +x deploy/*.sh'
+                sh './deploy/deploy.sh'
             }
         }
 
         stage('Verify') {
             steps {
-                sh './scripts/verify.sh'
+                sh './deploy/verify.sh'
             }
         }
     }
 
     post {
         success {
-            echo 'Deployed! Open http://<SERVER-IP>:8000 in your browser.'
+            echo 'Deployed! Open http://${APP_HOST}:8000 in your browser.'
         }
         failure {
             echo 'Deployment failed. Check the console output.'
